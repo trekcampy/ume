@@ -162,7 +162,7 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
 
         um_match(ctx,dup,results);
 
-        printf("URL %s",dup);
+        printf("%s",dup);
         for(int i=0; i<ctx->count;i++){
             if ( results[i] == true ) {
                 printf(",%d",i);
