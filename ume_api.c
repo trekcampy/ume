@@ -65,6 +65,9 @@ int um_match(const struct um_ctx *ctx, const char *url, bool *results){
         }
     }
 
+    if (pre) free(pre);
+    if (suf) free(suf);
+    
     return EXIT_SUCCESS;
 }
 
