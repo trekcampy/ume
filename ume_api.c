@@ -89,7 +89,20 @@ void um_free(struct um_ctx *ctx) {
     free(ctx);
 }
 
-
+/*
+ * Function:  um_tokenize 
+ * ----------------------------------------------------------------------------
+ * This function returns prefix and suffix of a string where prefix and suffix
+ * are delimited by first occurence of '/' character. In case where there is no
+ * '/', suffix will be empty.
+ *
+ *  s   : IN string that needs to be tokenized
+ *  pre : OUT prefix
+ *  suf : OUT suffix 
+ *
+ *  returns: true if successful
+ *           false in case of an error
+ */
 bool um_tokenize(const char *s, char **pre, char **suf){
 
     char *copy = strdup(s);
@@ -120,31 +133,46 @@ bool um_tokenize(const char *s, char **pre, char **suf){
     return true;
 }
 
+/*
+ * Function:  is_match 
+ * ----------------------------------------------------------------------------
+ * This function uses top-down dynamic programing algorithm to checks if there
+ * is a match between string and a pattern string taking into account a 
+ * wildcard character '*' in pattern string. 
+ *
+ *  s   : IN string that needs to be tokenized
+ *  p   : IN pattern string that can have '*' character
+ *
+ *  returns: true  : if there was a match
+ *           false : otherwise 
+ */
 static bool is_match(char * s, char * p){
 
+    /* empty string matchs empty pattern */
     if ( s==NULL && p==NULL) return true;
 
     if ( s==NULL || p==NULL) return false;
 
     int m = strlen(s);
     int n = strlen(p);
-
+ 
+    /* zero length string matchs zero length pattern */
     if (  n == 0  ) return (m == 0);
     
     bool dp[m+1][n+1];
-    int i,j;
     
     memset(dp,false,sizeof(dp));
-    
+
+    /* by definition wildcard pattern matchs empty string */   
     dp[0][0] = true;
-    for(j=0;j<n;j++){
+    for(int j=0;j<n;j++){
         if (p[j] == '*'){
             dp[0][j+1] = dp[0][j];
         }
     }
      
-    for(i=0;i<m;i++){
-        for(j=0;j<n;j++){
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
             if (p[j] == '*' ){
                 dp[i+1][j+1] = dp[i][j+1] || dp[i+1][j];
             } else if ( s[i] == p[j]  ){

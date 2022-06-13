@@ -138,7 +138,6 @@ char ** um_read_patterns_from_file(char *file_name){
  *  returns: EXIT_SUCCESS if successful
  *           EXIT_FAILURE in case of an error
  */
-
 int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
     FILE * fp;
     char *line = NULL;
