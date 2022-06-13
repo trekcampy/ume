@@ -67,7 +67,7 @@ int um_match(const struct um_ctx *ctx, const char *url, bool *results){
 
     if (pre) free(pre);
     if (suf) free(suf);
-    
+
     return EXIT_SUCCESS;
 }
 
@@ -87,13 +87,15 @@ void um_free(struct um_ctx *ctx) {
 }
 
 
-bool um_tokenize(char *s, char **pre, char **suf){
-    char *rest = s;
+bool um_tokenize(const char *s, char **pre, char **suf){
+
+    char *copy = strdup(s);
+    char *rest = copy;
+
     char *temp = strtok_r(rest, "/", &rest);
 
     /*
-     * malloc a new buffers for prefix and suffix since
-     * strtok works on incoming buffer 
+     * malloc a new buffers for prefix and suffix 
      */
     *pre = strdup(temp);
     if (*pre == NULL){
@@ -110,7 +112,8 @@ bool um_tokenize(char *s, char **pre, char **suf){
         }
     }else *suf = NULL;
 
- 
+    if (copy) free(copy);
+
     return true;
 }
 

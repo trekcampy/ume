@@ -10,7 +10,7 @@
  * forward declaration
  */
 char ** um_read_patterns_from_file(char *file_name);
-um_match_url_from_file(char *file_name, struct um_ctx *ctx);
+int um_match_url_from_file(char *file_name, struct um_ctx *ctx);
 
 int main(int ac, char **av) {
 
@@ -25,7 +25,7 @@ int main(int ac, char **av) {
     }
 
     if ( ( (filters = um_read_patterns_from_file(av[1])) == NULL) || 
-       ( (ctx = um_compile(filters)) == NULL ) )  {
+       ( (ctx = um_compile((const char **)filters)) == NULL ) )  {
         printf("ERROR : error processing pattern file : file=%s\n", av[1]);
         exit(EXIT_FAILURE);
     }
@@ -123,6 +123,7 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
             }
         }
         printf("\n");
+
         free(dup);
     }
 
