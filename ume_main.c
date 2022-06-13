@@ -4,15 +4,35 @@
  * this file contains the main function of ume application
  */
 
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "ume.h"
 
 /*
- * forward declaration
+ * forward declaration of local functions
  */
 char ** um_read_patterns_from_file(char *file_name);
 int um_match_url_from_file(char *file_name, struct um_ctx *ctx);
-void patterns_free(char **patterns);
+static void patterns_free(char **patterns);
 
+/*
+ * Function:  main 
+ * ----------------------------------------------------------------------------
+ * main reads patterns from pattern file, creates a context 
+ * and calls function to match URLs in url file
+ *
+ *  ac: number of parameter
+ *  av: array of strings contain command line parameters. In this case we 
+ *      expect two parameters :
+ *      1. name of the file containing patterns
+ *      2. name of the file containing URLs
+ *
+ *  returns: EXIT_SUCCESS if successful
+ *           EXIT_FAILURE in case of an error
+ */
 int main(int ac, char **av) {
 
     char *pre;
@@ -41,6 +61,17 @@ int main(int ac, char **av) {
 
 }
 
+/*
+ * Function:  um_read_patterns_from_file 
+ * ----------------------------------------------------------------------------
+ * This function reads patterns from file and returns them as array of strings.
+ * It assumes that there is one pattern per line
+ *
+ *  file_name : IN pattern file name
+ *
+ *  returns: char** if successful
+ *           NULL in case of an error
+ */
 char ** um_read_patterns_from_file(char *file_name){
     FILE * fp;
     char *line = NULL;
@@ -75,7 +106,7 @@ char ** um_read_patterns_from_file(char *file_name){
         patterns[index] = dup;
  
         index++;
-	free(line);
+	    free(line);
     }
 
     /*
@@ -93,6 +124,20 @@ char ** um_read_patterns_from_file(char *file_name){
 
     return patterns;
 }
+
+/*
+ * Function:  um_match_url_from_file 
+ * ----------------------------------------------------------------------------
+ * This function reads URLS from file, looks for a match with patterns in 
+ * contextstructure and prints all the match indexes to the stdout. It assumes 
+ * one URL per line.
+ *
+ *  file_name : IN file contain URLs
+ *  ctx       : IN pattern context
+ *
+ *  returns: EXIT_SUCCESS if successful
+ *           EXIT_FAILURE in case of an error
+ */
 
 int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
     FILE * fp;
@@ -127,7 +172,7 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
         printf("\n");
 
         free(dup);
-	free(line);
+	    free(line);
     }
 
     fclose(fp);
@@ -135,7 +180,16 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
     return EXIT_SUCCESS;
 }
 
-void patterns_free(char **patterns) {
+/*
+ * Function:  patterns_free 
+ * ----------------------------------------------------------------------------
+ * This function frees patterns array and associated character buffers.
+ *
+ *  patterns : IN pattern array
+ *
+ *  returns: none
+ */
+static void patterns_free(char **patterns) {
     if (patterns == NULL) return;
 
     char **iter = patterns;

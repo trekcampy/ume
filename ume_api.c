@@ -4,10 +4,13 @@
  * this file contains definition of the major UME APIs
  */
 
-#include "ume.h"
-#include "string.h"
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
-bool isMatch(char * s, char * p);
+#include "ume.h"
+
+static bool is_match(char * s, char * p);
 
 struct um_ctx *um_compile(const char **patterns){
 
@@ -58,7 +61,7 @@ int um_match(const struct um_ctx *ctx, const char *url, bool *results){
     um_tokenize(url,&pre,&suf);
 
     for (int i=0;i<ctx->count;i++){
-        if ( isMatch(pre, ctx->patterns[i].pref) && isMatch(suf,ctx->patterns[i].suff) ){
+        if ( is_match(pre, ctx->patterns[i].pref) && is_match(suf,ctx->patterns[i].suff) ){
             results[i] = true;
         } else {
             results[i] = false;
@@ -117,7 +120,7 @@ bool um_tokenize(const char *s, char **pre, char **suf){
     return true;
 }
 
-bool isMatch(char * s, char * p){
+static bool is_match(char * s, char * p){
 
     if ( s==NULL && p==NULL) return true;
 
