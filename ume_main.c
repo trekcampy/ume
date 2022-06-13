@@ -106,7 +106,6 @@ char ** um_read_patterns_from_file(char *file_name){
         patterns[index] = dup;
  
         index++;
-	    free(line);
     }
 
     /*
@@ -120,6 +119,7 @@ char ** um_read_patterns_from_file(char *file_name){
 
     patterns[index] = NULL;
 
+    if (line) free(line);
     fclose(fp);
 
     return patterns;
@@ -172,9 +172,9 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
         printf("\n");
 
         free(dup);
-	    free(line);
     }
 
+    if (line) free(line);
     fclose(fp);
 
     return EXIT_SUCCESS;
