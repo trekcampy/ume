@@ -1,0 +1,3 @@
+*.alpha.com
+*.ca.us/*
+www.*.com

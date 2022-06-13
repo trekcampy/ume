@@ -1,0 +1,5 @@
+www.alpha.com
+bravo.ca.us/one-layer
+charlie.ca.us/two/layer
+www.delta.com
+echo.com/simple
