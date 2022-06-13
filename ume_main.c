@@ -11,6 +11,7 @@
  */
 char ** um_read_patterns_from_file(char *file_name);
 int um_match_url_from_file(char *file_name, struct um_ctx *ctx);
+void patterns_free(char **patterns);
 
 int main(int ac, char **av) {
 
@@ -29,7 +30,7 @@ int main(int ac, char **av) {
         printf("ERROR : error processing pattern file : file=%s\n", av[1]);
         exit(EXIT_FAILURE);
     }
-    free(filters);
+    patterns_free(filters);
 
     if ( um_match_url_from_file(av[2],ctx) == EXIT_FAILURE ) {
         printf("ERROR : error processing url file : file=%s\n",av[2] );
@@ -74,6 +75,7 @@ char ** um_read_patterns_from_file(char *file_name){
         patterns[index] = dup;
  
         index++;
+	free(line);
     }
 
     /*
@@ -125,9 +127,22 @@ int um_match_url_from_file(char *file_name, struct um_ctx *ctx){
         printf("\n");
 
         free(dup);
+	free(line);
     }
 
     fclose(fp);
 
     return EXIT_SUCCESS;
+}
+
+void patterns_free(char **patterns) {
+    if (patterns == NULL) return;
+
+    char **iter = patterns;
+    while (*iter != NULL) {
+       free(*iter);
+       iter++;
+    }
+
+    free(patterns);
 }
