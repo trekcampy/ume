@@ -9,10 +9,6 @@
 /*
  * forward declaration
  */
-char** test1_filters();
-char** test2_filters();
-char** test1_urls();
-char** test2_urls();
 char ** um_read_patterns_from_file(char *file_name);
 um_match_url_from_file(char *file_name, struct um_ctx *ctx);
 
@@ -35,24 +31,6 @@ int main(int ac, char **av) {
     }
     free(filters);
 
-/*
-    char **turls = test2_urls();
-
-    while (*turls != NULL) {
-        bool results[ctx->count];
-        um_match(ctx,*turls,results);
-        printf("URL %s",*turls);
-        for(int i=0; i<ctx->count;i++){
-            if ( results[i] == true ) {
-                //printf("     matchs %s-%s\n",ctx->patterns[i].pref,ctx->patterns[i].suff);
-                printf(",%d",i);
-            }
-        }
-        printf("\n");
-        turls++;
-    }    
-*/
-
     if ( um_match_url_from_file(av[2],ctx) == EXIT_FAILURE ) {
         printf("ERROR : error processing url file : file=%s\n",av[2] );
         exit(EXIT_FAILURE);
@@ -60,62 +38,6 @@ int main(int ac, char **av) {
 
     um_free(ctx);
 
-}
-
-char** test1_filters(){
-
-    char **filters = (char**) malloc((4)*sizeof(char*));
-
-    for(int i = 0; i < 4; i++){
-        filters[i] = (char*)malloc(50*sizeof(char));
-    }
-
-    sprintf(filters[0],"www.*.need/sandy");
-    sprintf(filters[1],"www.atc.com/sandy*");
-    sprintf(filters[2],"www.abc.com");
-
-    filters[3] = NULL;
-
-    return filters;
-}
-
-char** test1_urls(){
-
-    char **url = (char**) malloc((3)*sizeof(char*));
-
-    for(int i = 0; i < 3; i++){
-        url[i] = (char*)malloc(50*sizeof(char));
-    }
-
-    sprintf(url[0],"www.atc.com/sandy/hook");
-    sprintf(url[1],"www.atc.com");
-    url[2] = NULL;
-
-    return url;
-}
-
-char** test2_filters(){
-#define PATTERN_FILE_NAME "pattern.txt"
-    return um_read_patterns_from_file(PATTERN_FILE_NAME);
-}
-
-char** test2_urls(){
-
-    char **url = (char**) malloc((6)*sizeof(char*));
-
-    for(int i = 0; i < 6; i++){
-        url[i] = (char*)malloc(50*sizeof(char));
-    }
-
-    sprintf(url[0],"www.alpha.com");
-    sprintf(url[1],"bravo.ca.us/one-layer");
-    sprintf(url[2],"charlie.ca.us/two/layer");
-    sprintf(url[3],"www.delta.com");
-    sprintf(url[4],"echo.com/simple");
-
-    url[5] = NULL;
-
-    return url;
 }
 
 char ** um_read_patterns_from_file(char *file_name){
